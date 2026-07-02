@@ -1,0 +1,295 @@
+Act as a senior Full Stack Software Engineer with 10+ years of experience.
+
+Build a professional Water Billing Management System using:
+
+Frontend:
+- React + Vite
+- Tailwind CSS
+- React Router
+- React Hook Form
+- React Icons
+
+Backend:
+- Firebase Authentication
+- Firebase Firestore
+- Firebase Storage (if required)
+
+The application should have a clean modern UI similar to modern admin dashboards (Notion, Linear, or Shadcn style).
+
+Use a white, blue, and gray color theme.
+
+The application must be fully responsive for desktop, tablet, and mobile.
+
+---------------------------------------
+AUTHENTICATION
+---------------------------------------
+
+Create a Firebase Login page.
+
+Only Admin can log in.
+
+After login redirect to Dashboard.
+
+---------------------------------------
+SIDEBAR
+---------------------------------------
+
+Dashboard
+
+Customer Management
+
+Daily Water Entry
+
+Reports
+
+Settings
+
+Logout
+
+---------------------------------------
+DASHBOARD
+---------------------------------------
+
+Display dashboard cards:
+
+• Total Customers
+• Today's Entries
+• Today's Collection
+• Pending Payments
+• Monthly Revenue
+
+Also show:
+
+Recent Water Entries
+
+Recent Customers
+
+---------------------------------------
+CUSTOMER MANAGEMENT
+---------------------------------------
+
+Create a complete customer management module.
+
+Fields:
+
+Customer ID (Auto Generated)
+
+Customer Name
+
+Mobile Number
+
+Address
+
+Area
+
+Water Rate
+
+Status
+
+Notes
+
+Features:
+
+Add Customer
+
+Edit Customer
+
+Delete Customer
+
+Search Customer
+
+View Customer Profile
+
+Store all data in Firebase Firestore.
+
+---------------------------------------
+DAILY WATER ENTRY
+---------------------------------------
+
+Create a page for entering daily water supply.
+
+Fields:
+
+Date
+
+Customer (Dropdown from Firebase)
+
+Water Quantity
+
+Rate (Automatically loaded from Customer)
+
+Total Amount (Auto Calculate)
+
+Payment Status
+
+Cash / UPI
+
+Remarks
+
+Features:
+
+Create Entry
+
+Edit Entry
+
+Delete Entry
+
+Search by Date
+
+Filter by Customer
+
+Store every entry in Firestore.
+
+---------------------------------------
+REPORTS
+---------------------------------------
+
+Create professional reports.
+
+Daily Report
+
+Show:
+
+Total Customers Served
+
+Total Water Quantity
+
+Total Collection
+
+Pending Amount
+
+Monthly Report
+
+Show:
+
+Monthly Revenue
+
+Total Entries
+
+Pending Amount
+
+Customer Report
+
+Show:
+
+Customer Details
+
+All Daily Entries
+
+Total Paid
+
+Total Pending
+
+Add Export to PDF button.
+
+---------------------------------------
+SETTINGS
+---------------------------------------
+
+Allow Admin to update:
+
+Business Name
+
+Business Logo
+
+Default Currency
+
+Default Water Rate
+
+---------------------------------------
+FIREBASE COLLECTIONS
+---------------------------------------
+
+customers
+
+daily_entries
+
+settings
+
+admin_users
+
+---------------------------------------
+UI REQUIREMENTS
+---------------------------------------
+
+Use reusable React components.
+
+Create:
+
+Navbar
+
+Sidebar
+
+Stat Cards
+
+Tables
+
+Search Bar
+
+Forms
+
+Confirmation Dialog
+
+Toast Notifications
+
+Loading Spinner
+
+Empty State
+
+---------------------------------------
+TABLE FEATURES
+---------------------------------------
+
+Sorting
+
+Search
+
+Pagination
+
+Responsive
+
+Action Buttons
+
+---------------------------------------
+FORM VALIDATION
+---------------------------------------
+
+Validate every form.
+
+Show proper error messages.
+
+---------------------------------------
+CODE QUALITY
+---------------------------------------
+
+Use React Hooks.
+
+Use Context API for Authentication.
+
+Separate components.
+
+Separate Firebase services.
+
+Keep code clean and scalable.
+
+---------------------------------------
+BONUS
+---------------------------------------
+
+Automatically calculate Total Amount.
+
+Generate Customer ID automatically.
+
+Show today's total collection on Dashboard.
+
+Show pending payment count.
+
+Use modern animations.
+
+Use clean typography.
+
+Use rounded cards.
+
+Use subtle shadows.
+
+The project should look like a professional SaaS dashboard suitable for real businesses.
