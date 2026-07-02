@@ -50,17 +50,19 @@ export function useAuth() {
 export function getFirebaseAuthError(code: string): string {
   switch (code) {
     case 'auth/user-not-found':
-    case 'auth/invalid-credential':
-      return 'Invalid email or password.';
     case 'auth/wrong-password':
-      return 'Incorrect password.';
+    case 'auth/invalid-credential':
+    case 'auth/invalid-login-credentials':
+      return 'Invalid email or password. Please check your credentials and try again.';
     case 'auth/invalid-email':
       return 'Please enter a valid email address.';
+    case 'auth/user-disabled':
+      return 'This account has been disabled.';
     case 'auth/too-many-requests':
-      return 'Too many attempts. Please try again later.';
+      return 'Too many failed attempts. Please try again later.';
     case 'auth/network-request-failed':
-      return 'Network error. Check your connection.';
+      return 'Network error. Please check your connection.';
     default:
-      return 'Login failed. Please try again.';
+      return 'Login failed. Please check your credentials.';
   }
 }
