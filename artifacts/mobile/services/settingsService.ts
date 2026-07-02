@@ -9,6 +9,7 @@ const defaultSettings: AppSettings = {
   businessName: 'Water Billing',
   defaultCurrency: '₹',
   defaultWaterRate: 10,
+  billingDay: 1,
 };
 
 export async function getSettings(): Promise<AppSettings> {

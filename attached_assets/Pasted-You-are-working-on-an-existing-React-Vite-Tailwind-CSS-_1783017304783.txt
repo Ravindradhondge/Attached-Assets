@@ -1,0 +1,183 @@
+You are working on an existing React + Vite + Tailwind CSS + Firebase Water Billing Management System.
+
+⚠️ Do NOT rebuild the application.
+⚠️ Do NOT change the existing UI design.
+⚠️ Do NOT remove any existing functionality.
+
+Only extend the current application by adding the following features while maintaining the existing code structure, components, and styling.
+
+==================================================
+1. ADD A NEW "BILLS" MODULE
+==================================================
+
+Create a new "Bills" page and add it to the bottom navigation.
+
+The Bills page should display all monthly bills generated for customers.
+
+Each bill card/table should contain:
+
+- Bill Number
+- Customer Name
+- Billing Month
+- Total Water Quantity
+- Total Amount
+- Previous Due
+- Grand Total
+- Bill Status (Paid / Pending / Overdue)
+
+Actions:
+
+- View Bill
+- Download PDF
+- Print Bill
+- Send WhatsApp
+- Mark as Paid
+
+==================================================
+2. MONTHLY BILL GENERATION
+==================================================
+
+Add a "Generate Monthly Bills" button.
+
+When clicked:
+
+- Fetch all Daily Water Entries for the selected month.
+- Group entries by Customer.
+- Calculate:
+  - Total Quantity
+  - Total Amount
+  - Previous Pending Balance
+  - Grand Total
+- Save the generated bill in a new Firestore collection called "monthly_bills".
+
+Do NOT modify the existing Daily Entry collection.
+
+==================================================
+3. SETTINGS
+==================================================
+
+Inside Settings add:
+
+Billing Date
+
+Allow the Admin to choose:
+
+- 1st of every month
+- 2nd of every month
+- 5th of every month
+- Custom Day
+
+Save this value in Firebase.
+
+==================================================
+4. PDF BILL
+==================================================
+
+Create a professional PDF invoice.
+
+Include:
+
+Business Name
+
+Business Logo
+
+Bill Number
+
+Bill Date
+
+Billing Period
+
+Customer Name
+
+Customer Address
+
+Customer Mobile
+
+Daily Water Summary
+
+Total Water Quantity
+
+Rate
+
+Previous Due
+
+Grand Total
+
+Payment Status
+
+Thank You Message
+
+The PDF should have a clean, modern invoice design.
+
+==================================================
+5. WHATSAPP BILL
+==================================================
+
+Every bill should have a "Send WhatsApp" button.
+
+When clicked:
+
+1. Generate the PDF.
+
+2. Prepare the following message automatically:
+
+Hello {Customer Name},
+
+Your Water Bill for {Month} has been generated.
+
+Total Amount: ₹XXXX
+
+Please complete your payment before the due date.
+
+Thank you.
+
+3. Open WhatsApp with the customer's mobile number and the message pre-filled.
+
+If browser limitations prevent attaching the PDF automatically, download the PDF first and then open WhatsApp with the prepared message.
+
+==================================================
+6. PAYMENT UPDATE
+==================================================
+
+Allow the admin to:
+
+- Mark Bill as Paid
+- Record Partial Payment
+- Update Payment Date
+- Select Payment Mode
+- Automatically update Customer Pending Balance
+
+==================================================
+7. DASHBOARD
+==================================================
+
+Without changing the current dashboard design, add:
+
+- Total Generated Bills
+- Pending Bills
+- Paid Bills
+- Monthly Billing Amount
+
+==================================================
+8. FIREBASE
+==================================================
+
+Create new collections only if they do not already exist:
+
+monthly_bills
+
+payments
+
+Do not change the existing customers or daily_entries collections.
+
+==================================================
+9. IMPORTANT
+==================================================
+
+- Keep the current UI exactly the same.
+- Keep the current color scheme.
+- Keep the existing navigation.
+- Reuse existing components whenever possible.
+- Follow the existing project architecture.
+- Do not break any existing functionality.
+- Write clean, production-ready code.

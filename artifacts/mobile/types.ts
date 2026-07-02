@@ -25,8 +25,31 @@ export interface DailyEntry {
   createdAt: any;
 }
 
+export interface MonthlyBill {
+  id: string;
+  billNumber: string;
+  customerId: string;
+  customerName: string;
+  customerMobile: string;
+  customerAddress: string;
+  customerArea: string;
+  billingMonth: string;
+  billingDate: string;
+  totalQuantity: number;
+  totalAmount: number;
+  previousDue: number;
+  grandTotal: number;
+  status: 'pending' | 'paid' | 'overdue';
+  paidAmount: number;
+  paidDate: string | null;
+  paymentMode: 'cash' | 'upi' | 'bank' | '';
+  waterRate: number;
+  createdAt: any;
+}
+
 export interface AppSettings {
   businessName: string;
   defaultCurrency: string;
   defaultWaterRate: number;
+  billingDay: number;
 }

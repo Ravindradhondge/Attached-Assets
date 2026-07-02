@@ -60,6 +60,10 @@ function RootLayoutNav() {
         name="entry/add"
         options={{ title: "Water Entry", headerStyle: { backgroundColor: "#F8FAFC" }, headerTintColor: "#2563EB" }}
       />
+      <Stack.Screen
+        name="bill/[id]"
+        options={{ title: "Bill Details", headerStyle: { backgroundColor: "#F8FAFC" }, headerTintColor: "#2563EB" }}
+      />
     </Stack>
   );
 }

@@ -1,9 +1,9 @@
+import { Feather } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Tabs } from "expo-router";
 import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
 import { SymbolView } from "expo-symbols";
-import { Feather } from "@expo/vector-icons";
 import React from "react";
 import { Platform, StyleSheet, View, useColorScheme } from "react-native";
 
@@ -23,6 +23,10 @@ function NativeTabLayout() {
       <NativeTabs.Trigger name="entries">
         <Icon sf={{ default: "drop", selected: "drop.fill" }} />
         <Label>Entries</Label>
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="bills">
+        <Icon sf={{ default: "doc.text", selected: "doc.text.fill" }} />
+        <Label>Bills</Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="reports">
         <Icon sf={{ default: "chart.bar", selected: "chart.bar.fill" }} />
@@ -65,12 +69,7 @@ function ClassicTabLayout() {
               style={StyleSheet.absoluteFill}
             />
           ) : isWeb ? (
-            <View
-              style={[
-                StyleSheet.absoluteFill,
-                { backgroundColor: colors.background },
-              ]}
-            />
+            <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.background }]} />
           ) : null,
         tabBarLabelStyle: {
           fontSize: 10,
@@ -84,11 +83,7 @@ function ClassicTabLayout() {
         options={{
           title: "Dashboard",
           tabBarIcon: ({ color }) =>
-            isIOS ? (
-              <SymbolView name="house" tintColor={color} size={22} />
-            ) : (
-              <Feather name="home" size={20} color={color} />
-            ),
+            isIOS ? <SymbolView name="house" tintColor={color} size={22} /> : <Feather name="home" size={20} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -96,11 +91,7 @@ function ClassicTabLayout() {
         options={{
           title: "Customers",
           tabBarIcon: ({ color }) =>
-            isIOS ? (
-              <SymbolView name="person.2" tintColor={color} size={22} />
-            ) : (
-              <Feather name="users" size={20} color={color} />
-            ),
+            isIOS ? <SymbolView name="person.2" tintColor={color} size={22} /> : <Feather name="users" size={20} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -108,11 +99,15 @@ function ClassicTabLayout() {
         options={{
           title: "Entries",
           tabBarIcon: ({ color }) =>
-            isIOS ? (
-              <SymbolView name="drop" tintColor={color} size={22} />
-            ) : (
-              <Feather name="droplet" size={20} color={color} />
-            ),
+            isIOS ? <SymbolView name="drop" tintColor={color} size={22} /> : <Feather name="droplet" size={20} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="bills"
+        options={{
+          title: "Bills",
+          tabBarIcon: ({ color }) =>
+            isIOS ? <SymbolView name="doc.text" tintColor={color} size={22} /> : <Feather name="file-text" size={20} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -120,11 +115,7 @@ function ClassicTabLayout() {
         options={{
           title: "Reports",
           tabBarIcon: ({ color }) =>
-            isIOS ? (
-              <SymbolView name="chart.bar" tintColor={color} size={22} />
-            ) : (
-              <Feather name="bar-chart-2" size={20} color={color} />
-            ),
+            isIOS ? <SymbolView name="chart.bar" tintColor={color} size={22} /> : <Feather name="bar-chart-2" size={20} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -132,11 +123,7 @@ function ClassicTabLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) =>
-            isIOS ? (
-              <SymbolView name="gear" tintColor={color} size={22} />
-            ) : (
-              <Feather name="settings" size={20} color={color} />
-            ),
+            isIOS ? <SymbolView name="gear" tintColor={color} size={22} /> : <Feather name="settings" size={20} color={color} />,
         }}
       />
     </Tabs>
