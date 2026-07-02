@@ -31,27 +31,32 @@ export default function CustomerAddScreen() {
   const [mobile, setMobile] = useState('');
   const [address, setAddress] = useState('');
   const [area, setArea] = useState('');
-  const [waterRate, setWaterRate] = useState('');
+  const [waterRate, setWaterRate] = useState('10');
   const [status, setStatus] = useState<'active' | 'inactive'>('active');
   const [notes, setNotes] = useState('');
 
   useEffect(() => {
     async function init() {
-      const [s] = await Promise.all([getSettings()]);
-      setWaterRate(String(s.defaultWaterRate));
-      if (isEdit && id) {
-        const customer = await getCustomer(id);
-        if (customer) {
-          setName(customer.name);
-          setMobile(customer.mobile);
-          setAddress(customer.address);
-          setArea(customer.area);
-          setWaterRate(String(customer.waterRate));
-          setStatus(customer.status);
-          setNotes(customer.notes);
+      try {
+        const [s] = await Promise.all([getSettings()]);
+        setWaterRate(String(s.defaultWaterRate));
+        if (isEdit && id) {
+          const customer = await getCustomer(id);
+          if (customer) {
+            setName(customer.name);
+            setMobile(customer.mobile);
+            setAddress(customer.address);
+            setArea(customer.area);
+            setWaterRate(String(customer.waterRate));
+            setStatus(customer.status);
+            setNotes(customer.notes);
+          }
         }
+      } catch (e: any) {
+        console.error('Init error:', e?.message ?? e);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
     init();
   }, [id, isEdit]);
@@ -71,14 +76,13 @@ export default function CustomerAddScreen() {
       const data = { name: name.trim(), mobile: mobile.trim(), address: address.trim(), area: area.trim(), waterRate: parseFloat(waterRate), status, notes: notes.trim() };
       if (isEdit && id) {
         await updateCustomer(id, data);
-        Alert.alert('Success', 'Customer updated.');
       } else {
         await addCustomer(data);
-        Alert.alert('Success', 'Customer added.');
       }
       router.back();
-    } catch (e) {
-      Alert.alert('Error', 'Failed to save customer.');
+    } catch (e: any) {
+      const msg = e?.message || e?.code || 'Unknown error';
+      Alert.alert('Failed to Save', msg);
     } finally {
       setSaving(false);
     }
