@@ -81,8 +81,23 @@ export default function CustomerAddScreen() {
       }
       router.back();
     } catch (e: any) {
-      const msg = e?.message || e?.code || 'Unknown error';
-      Alert.alert('Failed to Save', msg);
+      const isPermission = e?.code === 'permission-denied' || String(e?.message).includes('permissions');
+      if (isPermission) {
+        Alert.alert(
+          '🔒 Firebase Rules Blocked',
+          'Your Firestore security rules are denying writes.\n\n' +
+          'Fix in Firebase Console:\n' +
+          '1. Go to console.firebase.google.com\n' +
+          '2. Select your project\n' +
+          '3. Firestore Database → Rules\n' +
+          '4. Replace rules with:\n\n' +
+          'allow read, write: if request.auth != null;\n\n' +
+          '5. Click Publish',
+          [{ text: 'OK' }]
+        );
+      } else {
+        Alert.alert('Failed to Save', e?.message || e?.code || 'Unknown error');
+      }
     } finally {
       setSaving(false);
     }
