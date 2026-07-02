@@ -18,3 +18,14 @@ expertMode = true
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 20000
+
+[userenv]
+
+[userenv.shared]
+EXPO_PUBLIC_FIREBASE_API_KEY = "AIzaSyBC8LnCHbKe6N9owc4Ii4WiCXQvt5HSGck"
+EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN = "water-billing-system-47c4f.firebaseapp.com"
+EXPO_PUBLIC_FIREBASE_PROJECT_ID = "water-billing-system-47c4f"
+EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET = "water-billing-system-47c4f.firebasestorage.app"
+EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = "289946079878"
+EXPO_PUBLIC_FIREBASE_APP_ID = "1:289946079878:web:0de344e373bd669178b707"
+EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID = "G-9GJ0S6BN2T"

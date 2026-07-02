@@ -6,24 +6,60 @@ import {
   useFonts,
 } from "@expo-google-fonts/inter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Stack } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
+import { ActivityIndicator, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
 function RootLayoutNav() {
+  const { user, loading } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (loading) return;
+    const inTabsGroup = segments[0] === "(tabs)";
+    if (!user && inTabsGroup) {
+      router.replace("/login");
+    } else if (user && !inTabsGroup && segments[0] !== "(tabs)") {
+      router.replace("/(tabs)");
+    }
+  }, [user, loading, segments]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F8FAFC" }}>
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
+
   return (
     <Stack screenOptions={{ headerBackTitle: "Back" }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="customer/add"
+        options={{ title: "Customer", headerStyle: { backgroundColor: "#F8FAFC" }, headerTintColor: "#2563EB" }}
+      />
+      <Stack.Screen
+        name="customer/[id]"
+        options={{ title: "Customer Profile", headerStyle: { backgroundColor: "#F8FAFC" }, headerTintColor: "#2563EB" }}
+      />
+      <Stack.Screen
+        name="entry/add"
+        options={{ title: "Water Entry", headerStyle: { backgroundColor: "#F8FAFC" }, headerTintColor: "#2563EB" }}
+      />
     </Stack>
   );
 }
@@ -50,7 +86,9 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <GestureHandlerRootView>
             <KeyboardProvider>
-              <RootLayoutNav />
+              <AuthProvider>
+                <RootLayoutNav />
+              </AuthProvider>
             </KeyboardProvider>
           </GestureHandlerRootView>
         </QueryClientProvider>

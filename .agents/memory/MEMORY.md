@@ -1,0 +1,2 @@
+- [Firebase Expo Setup](firebase-expo.md) — initializeAuth + getReactNativePersistence(AsyncStorage) needed on native; plain getAuth for web; wrap in try/catch for HMR safety.
+- [Water Billing App Structure](water-billing-structure.md) — Firestore-backed mobile app; all queries fetch full collection and filter client-side to avoid compound index requirements.
