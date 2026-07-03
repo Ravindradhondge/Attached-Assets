@@ -29,9 +29,10 @@ function RootLayoutNav() {
   useEffect(() => {
     if (loading) return;
     const inTabsGroup = segments[0] === "(tabs)";
+    const onLoginOrRoot = segments[0] === "login" || segments.length === 0;
     if (!user && inTabsGroup) {
       router.replace("/login");
-    } else if (user && !inTabsGroup && segments[0] !== "(tabs)") {
+    } else if (user && onLoginOrRoot) {
       router.replace("/(tabs)");
     }
   }, [user, loading, segments]);
