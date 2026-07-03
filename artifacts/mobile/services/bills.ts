@@ -1,111 +1,49 @@
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  orderBy,
-  query,
-  serverTimestamp,
-  updateDoc,
-} from 'firebase/firestore';
 import { MonthlyBill } from '../types';
-import { getCustomers } from './customers';
-import { getEntries } from './entries';
-import { db } from './firebase';
+import { api } from './api';
 
-const COL = 'monthly_bills';
+function toBill(row: any): MonthlyBill {
+  return {
+    id: row.id,
+    billNumber: row.billNumber ?? row.bill_number ?? '',
+    customerId: row.customerId ?? row.customer_id ?? '',
+    customerName: row.customerName ?? row.customer_name ?? '',
+    customerMobile: row.customerMobile ?? row.customer_mobile ?? '',
+    customerAddress: row.customerAddress ?? row.customer_address ?? '',
+    customerArea: row.customerArea ?? row.customer_area ?? '',
+    billingMonth: row.billingMonth ?? row.billing_month ?? '',
+    billingDate: row.billingDate ?? row.billing_date ?? '',
+    totalQuantity: Number(row.totalQuantity ?? row.total_quantity ?? 0),
+    totalAmount: Number(row.totalAmount ?? row.total_amount ?? 0),
+    previousDue: Number(row.previousDue ?? row.previous_due ?? 0),
+    grandTotal: Number(row.grandTotal ?? row.grand_total ?? 0),
+    status: row.status ?? 'pending',
+    paidAmount: Number(row.paidAmount ?? row.paid_amount ?? 0),
+    paidDate: row.paidDate ?? row.paid_date ?? null,
+    paymentMode: row.paymentMode ?? row.payment_mode ?? '',
+    waterRate: Number(row.waterRate ?? row.water_rate ?? 0),
+    createdAt: row.createdAt ?? row.created_at ?? null,
+  };
+}
 
 export async function getBills(): Promise<MonthlyBill[]> {
-  const q = query(collection(db, COL), orderBy('createdAt', 'desc'));
-  const snap = await getDocs(q);
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() } as MonthlyBill));
+  const rows = await api.get<any[]>('/bills');
+  return rows.map(toBill);
 }
 
 export async function getBillsByMonth(month: string): Promise<MonthlyBill[]> {
-  const bills = await getBills();
-  return bills.filter((b) => b.billingMonth === month);
+  const all = await getBills();
+  return all.filter((b) => b.billingMonth === month);
 }
 
 export async function generateMonthlyBills(
   month: string,
-  billingDay: number = 1
+  billingDay = 1
 ): Promise<{ generated: number; skipped: number }> {
-  const [allEntries, allCustomers, allBills] = await Promise.all([
-    getEntries(),
-    getCustomers(),
-    getBills(),
-  ]);
-
-  const monthEntries = allEntries.filter((e) => e.date.startsWith(month));
-  const existingBillCustomers = new Set(
-    allBills.filter((b) => b.billingMonth === month).map((b) => b.customerId)
-  );
-
-  const grouped: Record<string, typeof monthEntries> = {};
-  for (const entry of monthEntries) {
-    if (!grouped[entry.customerId]) grouped[entry.customerId] = [];
-    grouped[entry.customerId].push(entry);
-  }
-
-  let billCount = allBills.length;
-  let generated = 0;
-  let skipped = 0;
-
-  for (const [customerId, entries] of Object.entries(grouped)) {
-    if (existingBillCustomers.has(customerId)) {
-      skipped++;
-      continue;
-    }
-
-    const customer = allCustomers.find((c) => c.id === customerId);
-    if (!customer) continue;
-
-    const prevPendingEntries = allEntries.filter(
-      (e) =>
-        e.customerId === customerId &&
-        !e.date.startsWith(month) &&
-        e.paymentStatus === 'pending'
-    );
-    const previousDue = prevPendingEntries.reduce((s, e) => s + e.totalAmount, 0);
-    const totalQuantity = entries.reduce((s, e) => s + e.waterQuantity, 0);
-    const totalAmount = entries.reduce((s, e) => s + e.totalAmount, 0);
-    const grandTotal = totalAmount + previousDue;
-
-    billCount++;
-    const billNumber = `WB-${month.replace('-', '')}-${String(billCount).padStart(3, '0')}`;
-    const [year, mon] = month.split('-');
-    const day = Math.min(billingDay, new Date(parseInt(year), parseInt(mon), 0).getDate());
-    const billingDate = `${year}-${mon}-${String(day).padStart(2, '0')}`;
-
-    await addDoc(collection(db, COL), {
-      billNumber,
-      customerId: customer.id,
-      customerName: customer.name,
-      customerMobile: customer.mobile,
-      customerAddress: customer.address,
-      customerArea: customer.area,
-      billingMonth: month,
-      billingDate,
-      totalQuantity,
-      totalAmount,
-      previousDue,
-      grandTotal,
-      status: 'pending',
-      paidAmount: 0,
-      paidDate: null,
-      paymentMode: '',
-      waterRate: customer.waterRate,
-      createdAt: serverTimestamp(),
-    });
-    generated++;
-  }
-
-  return { generated, skipped };
+  return api.post<{ generated: number; skipped: number }>('/bills/generate', { month, billingDay });
 }
 
 export async function updateBill(id: string, data: Partial<MonthlyBill>): Promise<void> {
-  await updateDoc(doc(db, COL, id), data);
+  await api.put(`/bills/${id}`, data);
 }
 
 export async function markBillPaid(
@@ -114,14 +52,9 @@ export async function markBillPaid(
   paidDate: string,
   paymentMode: string
 ): Promise<void> {
-  await updateDoc(doc(db, COL, id), {
-    status: 'paid',
-    paidAmount: amount,
-    paidDate,
-    paymentMode,
-  });
+  await api.put(`/bills/${id}`, { status: 'paid', paidAmount: amount, paidDate, paymentMode });
 }
 
 export async function deleteBill(id: string): Promise<void> {
-  await deleteDoc(doc(db, COL, id));
+  await api.delete(`/bills/${id}`);
 }
