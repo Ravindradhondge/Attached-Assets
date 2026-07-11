@@ -1,6 +1,6 @@
 import { db } from "@workspace/db";
 import { billsTable, customersTable, entriesTable } from "@workspace/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { Router } from "express";
 
 const router = Router();
@@ -17,72 +17,85 @@ router.get("/bills/:id", async (req, res) => {
 });
 
 router.post("/bills/generate", async (req, res) => {
-  const { month, billingDay = 1 } = req.body as { month: string; billingDay?: number };
+  try {
+    const { month, billingDay = 1 } = req.body as { month: string; billingDay?: number };
 
-  const [allEntries, allCustomers, allBills] = await Promise.all([
-    db.select().from(entriesTable),
-    db.select().from(customersTable),
-    db.select().from(billsTable),
-  ]);
+    if (!month || !/^\d{4}-\d{2}$/.test(month)) {
+      res.status(400).json({ error: "Invalid month format. Use YYYY-MM." });
+      return;
+    }
 
-  const monthEntries = allEntries.filter((e) => e.date.startsWith(month));
-  const existingCustomerIds = new Set(
-    allBills.filter((b) => b.billingMonth === month).map((b) => b.customerId)
-  );
+    const [allEntries, activeCustomers, allBills] = await Promise.all([
+      db.select().from(entriesTable),
+      db.select().from(customersTable).where(eq(customersTable.status, "active")),
+      db.select().from(billsTable),
+    ]);
 
-  const grouped: Record<string, typeof monthEntries> = {};
-  for (const e of monthEntries) {
-    if (!grouped[e.customerId]) grouped[e.customerId] = [];
-    grouped[e.customerId].push(e);
-  }
-
-  let billCount = allBills.length;
-  let generated = 0;
-  let skipped = 0;
-
-  for (const [customerId, entries] of Object.entries(grouped)) {
-    if (existingCustomerIds.has(customerId)) { skipped++; continue; }
-    const customer = allCustomers.find((c) => c.id === customerId);
-    if (!customer) continue;
-
-    const prevPending = allEntries.filter(
-      (e) => e.customerId === customerId && !e.date.startsWith(month) && e.paymentStatus === "pending"
+    const existingCustomerIds = new Set(
+      allBills.filter((b) => b.billingMonth === month).map((b) => b.customerId)
     );
-    const previousDue = prevPending.reduce((s, e) => s + (e.totalAmount ?? 0), 0);
-    const totalQuantity = entries.reduce((s, e) => s + (e.waterQuantity ?? 0), 0);
-    const totalAmount = entries.reduce((s, e) => s + (e.totalAmount ?? 0), 0);
-    const grandTotal = totalAmount + previousDue;
 
-    billCount++;
-    const billNumber = `WB-${month.replace("-", "")}-${String(billCount).padStart(3, "0")}`;
     const [y, m] = month.split("-");
     const maxDay = new Date(parseInt(y), parseInt(m), 0).getDate();
-    const day = Math.min(billingDay, maxDay);
+    const day = Math.min(Math.max(1, billingDay), maxDay);
     const billingDate = `${y}-${m}-${String(day).padStart(2, "0")}`;
 
-    await db.insert(billsTable).values({
-      billNumber,
-      customerId: customer.id,
-      customerName: customer.name,
-      customerMobile: customer.mobile,
-      customerAddress: customer.address,
-      customerArea: customer.area,
-      billingMonth: month,
-      billingDate,
-      totalQuantity,
-      totalAmount,
-      previousDue,
-      grandTotal,
-      status: "pending",
-      paidAmount: 0,
-      paidDate: null,
-      paymentMode: "",
-      waterRate: customer.waterRate,
-    });
-    generated++;
-  }
+    let billCount = allBills.length;
+    let generated = 0;
+    let skipped = 0;
 
-  res.json({ generated, skipped });
+    for (const customer of activeCustomers) {
+      if (existingCustomerIds.has(customer.id)) {
+        skipped++;
+        continue;
+      }
+
+      const customerEntries = allEntries.filter(
+        (e) => e.customerId === customer.id && e.date.startsWith(month)
+      );
+
+      const prevPendingEntries = allEntries.filter(
+        (e) =>
+          e.customerId === customer.id &&
+          !e.date.startsWith(month) &&
+          e.paymentStatus === "pending"
+      );
+
+      const totalQuantity = customerEntries.reduce((s, e) => s + (e.waterQuantity ?? 0), 0);
+      const totalAmount = customerEntries.reduce((s, e) => s + (e.totalAmount ?? 0), 0);
+      const previousDue = prevPendingEntries.reduce((s, e) => s + (e.totalAmount ?? 0), 0);
+      const grandTotal = totalAmount + previousDue;
+
+      billCount++;
+      const billNumber = `WB-${month.replace("-", "")}-${String(billCount).padStart(3, "0")}`;
+
+      await db.insert(billsTable).values({
+        billNumber,
+        customerId: customer.id,
+        customerName: customer.name,
+        customerMobile: customer.mobile ?? "",
+        customerAddress: customer.address ?? "",
+        customerArea: customer.area ?? "",
+        billingMonth: month,
+        billingDate,
+        totalQuantity,
+        totalAmount,
+        previousDue,
+        grandTotal,
+        status: "pending",
+        paidAmount: 0,
+        paidDate: null,
+        paymentMode: "",
+        waterRate: customer.waterRate ?? 0,
+      });
+      generated++;
+    }
+
+    res.json({ generated, skipped });
+  } catch (err) {
+    req.log.error(err, "Failed to generate bills");
+    res.status(500).json({ error: "Failed to generate bills" });
+  }
 });
 
 router.put("/bills/:id", async (req, res) => {

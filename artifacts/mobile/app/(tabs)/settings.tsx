@@ -20,7 +20,6 @@ import { useColors } from '@/hooks/useColors';
 import { getSettings, saveSettings } from '@/services/settingsService';
 import { AppSettings } from '@/types';
 
-const CURRENCIES = ['₹', '$', '€', '£', '¥'];
 const BILLING_DAYS = [1, 2, 5, 10, 15];
 
 export default function SettingsScreen() {
@@ -104,14 +103,6 @@ export default function SettingsScreen() {
           </View>
           <Text style={s.label}>Business Name</Text>
           <TextInput style={s.input} value={form.businessName} onChangeText={(v) => setForm((f) => ({ ...f, businessName: v }))} placeholder="e.g. Sharma Water Supply" placeholderTextColor={colors.mutedForeground} />
-          <Text style={s.label}>Default Currency</Text>
-          <View style={s.chipRow}>
-            {CURRENCIES.map((c) => (
-              <TouchableOpacity key={c} style={[s.chip, { borderColor: form.defaultCurrency === c ? colors.primary : colors.border, backgroundColor: form.defaultCurrency === c ? colors.accent : colors.background }]} onPress={() => setForm((f) => ({ ...f, defaultCurrency: c }))}>
-                <Text style={[s.chipText, { color: form.defaultCurrency === c ? colors.primary : colors.mutedForeground }]}>{c}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
         </View>
 
         <View style={s.section}>

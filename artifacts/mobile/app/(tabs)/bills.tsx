@@ -88,9 +88,15 @@ export default function BillsScreen() {
             try {
               const { generated, skipped } = await generateMonthlyBills(month, settings.billingDay);
               await load();
-              Alert.alert('Done', `${generated} bills generated, ${skipped} skipped (already exist).`);
-            } catch (e) {
-              Alert.alert('Error', 'Failed to generate bills.');
+              if (generated === 0 && skipped === 0) {
+                Alert.alert('No Bills', 'No active customers found. Add customers first.');
+              } else if (generated === 0) {
+                Alert.alert('Already Done', `Bills for ${monthLabel(month)} were already generated. (${skipped} customer${skipped !== 1 ? 's' : ''} skipped)`);
+              } else {
+                Alert.alert('Bills Generated ✓', `${generated} bill${generated !== 1 ? 's' : ''} created for ${monthLabel(month)}.${skipped > 0 ? `\n${skipped} already existed and were skipped.` : ''}`);
+              }
+            } catch (e: any) {
+              Alert.alert('Error', e?.message ?? 'Failed to generate bills. Please try again.');
             } finally {
               setGenerating(false);
             }
