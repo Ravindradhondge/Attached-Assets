@@ -5,8 +5,9 @@ import { Tabs } from "expo-router";
 import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
 import { SymbolView } from "expo-symbols";
 import React from "react";
-import { Platform, StyleSheet, View, useColorScheme } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
+import { useTheme } from "@/contexts/ThemeContext";
 import { useColors } from "@/hooks/useColors";
 
 function NativeTabLayout() {
@@ -42,22 +43,21 @@ function NativeTabLayout() {
 
 function ClassicTabLayout() {
   const colors = useColors();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { theme } = useTheme();
   const isIOS = Platform.OS === "ios";
   const isWeb = Platform.OS === "web";
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#6366F1",
-        tabBarInactiveTintColor: "#475569",
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.mutedForeground,
         headerShown: false,
         tabBarStyle: {
           position: "absolute",
-          backgroundColor: isIOS ? "transparent" : "#0F1623",
+          backgroundColor: isIOS ? "transparent" : colors.card,
           borderTopWidth: 1,
-          borderTopColor: "#2A3148",
+          borderTopColor: colors.border,
           elevation: 0,
           ...(isWeb ? { height: 84 } : {}),
         },
@@ -65,11 +65,11 @@ function ClassicTabLayout() {
           isIOS ? (
             <BlurView
               intensity={80}
-              tint="dark"
+              tint={theme === "dark" ? "dark" : "light"}
               style={StyleSheet.absoluteFill}
             />
           ) : isWeb ? (
-            <View style={[StyleSheet.absoluteFill, { backgroundColor: "#0F1623" }]} />
+            <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.card }]} />
           ) : null,
         tabBarLabelStyle: {
           fontSize: 10,

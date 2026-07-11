@@ -1,0 +1,215 @@
+You are working on an existing Water Billing Management System built with React + Vite + Tailwind CSS + Firebase.
+
+⚠️ IMPORTANT:
+- Do NOT rebuild the application.
+- Do NOT change the existing UI design.
+- Do NOT change the current color theme.
+- Do NOT remove any existing functionality.
+- Only modify and improve the existing project.
+
+====================================================
+1. REMOVE DEFAULT WATER RATE
+====================================================
+
+Remove the "Default Water Rate" option from the Settings page.
+
+Water Rate should ONLY be stored for each individual customer inside Customer Management.
+
+Whenever a customer is selected in Daily Water Entry, automatically load that customer's water rate.
+
+====================================================
+2. LOGIN WITH MOBILE NUMBER
+====================================================
+
+Replace the current login system with Firebase Phone Authentication.
+
+Requirements:
+
+- Login using Mobile Number + OTP.
+- Use Firebase Phone Authentication.
+- Only registered admin mobile numbers should be allowed to log in.
+- If an unregistered mobile number logs in, show:
+  "You are not authorized to access this application."
+
+Maintain the existing login UI.
+
+====================================================
+3. ADD LIGHT MODE / DARK MODE
+====================================================
+
+Add Theme Settings.
+
+Options:
+
+☀️ Light Mode
+
+🌙 Dark Mode
+
+The selected theme should be saved locally and automatically applied when the app opens again.
+
+Do not change the existing UI design.
+
+====================================================
+4. MOVE LOGOUT BUTTON
+====================================================
+
+Remove the Logout button from the Dashboard.
+
+Move the Logout button to the bottom of the Settings page.
+
+The Settings page should contain:
+
+Business Information
+
+Theme Selection
+
+Billing Settings
+
+Logout Button
+
+====================================================
+5. CUSTOMER BILL GENERATION
+====================================================
+
+Inside every Customer Profile, add a new button:
+
+🧾 Generate Bill
+
+When clicked:
+
+- Collect all Daily Water Entries for the selected billing month.
+- Calculate:
+    • Total Water Quantity
+    • Total Amount
+    • Previous Pending Balance
+    • Grand Total
+- Create the customer's monthly bill.
+- Save the bill to Firebase.
+
+====================================================
+6. CUSTOMER WHATSAPP BILL
+====================================================
+
+After generating a bill, show another button:
+
+📲 Send via WhatsApp
+
+When clicked:
+
+Generate a professional PDF bill.
+
+Prepare the following message automatically:
+
+----------------------------------------
+
+Hello {Customer Name},
+
+Your Water Bill for {Month} has been generated.
+
+Bill Amount : ₹XXXX
+
+Please make your payment at your earliest convenience.
+
+Thank you.
+
+----------------------------------------
+
+Open WhatsApp with the customer's mobile number and the above message pre-filled.
+
+If browser limitations prevent attaching the PDF automatically:
+
+1. Download the PDF.
+2. Open WhatsApp with the prepared message.
+
+====================================================
+7. CUSTOMER PAGE IMPROVEMENTS
+====================================================
+
+Each Customer Card/Table should have:
+
+View
+
+Edit
+
+Delete
+
+Generate Bill
+
+Send WhatsApp Bill
+
+View Billing History
+
+====================================================
+8. BILL HISTORY
+====================================================
+
+Each customer should have a Billing History page.
+
+Display:
+
+Billing Month
+
+Total Water Quantity
+
+Total Amount
+
+Paid Amount
+
+Pending Amount
+
+Bill Status
+
+Actions:
+
+View PDF
+
+Print
+
+Download
+
+Send WhatsApp Again
+
+====================================================
+9. SETTINGS PAGE
+====================================================
+
+Keep only:
+
+Business Name
+
+Business Logo
+
+Business Mobile Number
+
+Billing Generation Date
+
+Theme Selection
+
+Logout
+
+Remove the Default Water Rate setting completely.
+
+====================================================
+10. FIREBASE
+====================================================
+
+Do not change the existing collections.
+
+If required, create only:
+
+monthly_bills
+
+payments
+
+Keep all existing customer and daily entry data unchanged.
+
+====================================================
+11. IMPORTANT
+====================================================
+
+- Reuse existing components.
+- Follow the current folder structure.
+- Keep the UI exactly as it is.
+- Do not redesign the application.
+- Do not break any existing features.
+- Write clean, scalable, production-ready code.

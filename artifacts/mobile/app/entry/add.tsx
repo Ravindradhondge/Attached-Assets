@@ -18,7 +18,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useColors } from '@/hooks/useColors';
 import { getCustomers } from '@/services/customers';
 import { addEntry, getEntry, updateEntry } from '@/services/entries';
-import { getSettings } from '@/services/settingsService';
 import { Customer } from '@/types';
 
 function todayStr() { return new Date().toISOString().split('T')[0]; }
@@ -46,7 +45,7 @@ export default function EntryAddScreen() {
 
   useEffect(() => {
     async function init() {
-      const [c, s] = await Promise.all([getCustomers(), getSettings()]);
+      const c = await getCustomers();
       const activeCustomers = c.filter((cust) => cust.status === 'active');
       setCustomers(activeCustomers);
       if (isEdit && id) {
@@ -62,8 +61,6 @@ export default function EntryAddScreen() {
           setPaymentMethod(entry.paymentMethod);
           setRemarks(entry.remarks);
         }
-      } else {
-        setRate(String(s.defaultWaterRate));
       }
       setLoading(false);
     }
@@ -183,16 +180,16 @@ export default function EntryAddScreen() {
         <Text style={s.label}>Payment Status</Text>
         <View style={s.statusRow}>
           <TouchableOpacity
-            style={[s.statusBtn, { borderColor: paymentStatus === 'pending' ? '#D97706' : colors.border, backgroundColor: paymentStatus === 'pending' ? '#FEF3C7' : colors.card }]}
+            style={[s.statusBtn, { borderColor: paymentStatus === 'pending' ? colors.warning : colors.border, backgroundColor: paymentStatus === 'pending' ? colors.muted : colors.card }]}
             onPress={() => { setPaymentStatus('pending'); setPaymentMethod(''); }}
           >
-            <Text style={[s.statusText, { color: paymentStatus === 'pending' ? '#92400E' : colors.mutedForeground }]}>Pending</Text>
+            <Text style={[s.statusText, { color: paymentStatus === 'pending' ? colors.warning : colors.mutedForeground }]}>Pending</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[s.statusBtn, { borderColor: paymentStatus === 'paid' ? colors.success : colors.border, backgroundColor: paymentStatus === 'paid' ? '#D1FAE5' : colors.card }]}
+            style={[s.statusBtn, { borderColor: paymentStatus === 'paid' ? colors.success : colors.border, backgroundColor: paymentStatus === 'paid' ? colors.muted : colors.card }]}
             onPress={() => { setPaymentStatus('paid'); if (!paymentMethod) setPaymentMethod('cash'); }}
           >
-            <Text style={[s.statusText, { color: paymentStatus === 'paid' ? '#065F46' : colors.mutedForeground }]}>Paid</Text>
+            <Text style={[s.statusText, { color: paymentStatus === 'paid' ? colors.success : colors.mutedForeground }]}>Paid</Text>
           </TouchableOpacity>
         </View>
 

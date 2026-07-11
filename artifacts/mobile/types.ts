@@ -50,6 +50,6 @@ export interface MonthlyBill {
 export interface AppSettings {
   businessName: string;
   defaultCurrency: string;
-  defaultWaterRate: number;
   billingDay: number;
+  defaultWaterRate?: number;
 }

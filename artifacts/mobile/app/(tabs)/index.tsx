@@ -31,7 +31,7 @@ export default function DashboardScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { signOut } = useAuth();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -85,12 +85,11 @@ export default function DashboardScreen() {
     headerLeft: { gap: 2 },
     greeting: { fontSize: 12, color: colors.mutedForeground, fontFamily: 'Inter_400Regular' },
     bizName: { fontSize: 20, fontWeight: '700', color: colors.text, fontFamily: 'Inter_700Bold' },
-    logoutBtn: { width: 38, height: 38, borderRadius: 10, backgroundColor: colors.card, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
     scroll: { paddingHorizontal: 20 },
     sectionTitle: { fontSize: 15, fontWeight: '600', color: colors.text, fontFamily: 'Inter_600SemiBold', marginTop: 20, marginBottom: 10 },
     row: { flexDirection: 'row', gap: 12, marginBottom: 12 },
     recentCard: { backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 10 },
-    recentIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#252D45', alignItems: 'center', justifyContent: 'center' },
+    recentIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center' },
     recentMain: { flex: 1 },
     recentName: { fontSize: 14, fontWeight: '600', color: colors.text, fontFamily: 'Inter_600SemiBold' },
     recentSub: { fontSize: 12, color: colors.mutedForeground, fontFamily: 'Inter_400Regular', marginTop: 1 },
@@ -102,7 +101,7 @@ export default function DashboardScreen() {
     monthValue: { fontSize: 28, fontWeight: '700', color: '#fff', fontFamily: 'Inter_700Bold', marginTop: 4 },
     monthSub: { fontSize: 12, color: 'rgba(255,255,255,0.65)', fontFamily: 'Inter_400Regular', marginTop: 2 },
     billCard: { backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 10 },
-    billIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#1E1B38', alignItems: 'center', justifyContent: 'center' },
+    billIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center' },
   });
 
   if (loading) {
@@ -123,9 +122,6 @@ export default function DashboardScreen() {
           <Text style={s.greeting}>{greeting}</Text>
           <Text style={s.bizName}>{settings.businessName}</Text>
         </View>
-        <TouchableOpacity style={s.logoutBtn} onPress={() => signOut()}>
-          <Feather name="log-out" size={16} color={colors.mutedForeground} />
-        </TouchableOpacity>
       </View>
 
       <ScrollView

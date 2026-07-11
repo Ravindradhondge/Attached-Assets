@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
@@ -18,7 +18,6 @@ import { deleteCustomer, getCustomer } from '@/services/customers';
 import { getEntries } from '@/services/entries';
 import { getSettings } from '@/services/settingsService';
 import { AppSettings, Customer, DailyEntry } from '@/types';
-import { useFocusEffect } from 'expo-router';
 
 export default function CustomerDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -28,7 +27,7 @@ export default function CustomerDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [entries, setEntries] = useState<DailyEntry[]>([]);
-  const [settings, setSettings] = useState<AppSettings>({ businessName: '', defaultCurrency: '₹', defaultWaterRate: 10 });
+  const [settings, setSettings] = useState<AppSettings>({ businessName: '', defaultCurrency: '₹', billingDay: 1 });
 
   const load = useCallback(async () => {
     if (!id) return;
@@ -54,6 +53,11 @@ export default function CustomerDetailScreen() {
       },
     ]);
   };
+
+  const isPaidBg = colors.success === '#34D399' ? '#0D2218' : '#D1FAE5';
+  const isPaidText = colors.success === '#34D399' ? '#34D399' : '#065F46';
+  const isPendingBg = colors.warning === '#FBBF24' ? '#241A06' : '#FEF3C7';
+  const isPendingText = colors.warning === '#FBBF24' ? '#FBBF24' : '#92400E';
 
   const cur = settings.defaultCurrency;
   const totalPaid = entries.filter((e) => e.paymentStatus === 'paid').reduce((s, e) => s + e.totalAmount, 0);
@@ -87,10 +91,13 @@ export default function CustomerDetailScreen() {
     entryAmt: { fontSize: 14, fontWeight: '700', color: colors.text, fontFamily: 'Inter_700Bold' },
     entryBadge: { borderRadius: 20, paddingHorizontal: 7, paddingVertical: 2 },
     entryBadgeText: { fontSize: 10, fontWeight: '600', fontFamily: 'Inter_600SemiBold' },
-    actionRow: { flexDirection: 'row', gap: 10, marginBottom: 20 },
+    actionRow: { flexDirection: 'row', gap: 10, marginBottom: 12 },
     editBtn: { flex: 1, backgroundColor: colors.primary, borderRadius: 12, paddingVertical: 13, alignItems: 'center', shadowColor: colors.primary, shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.3, shadowRadius: 6, elevation: 4 },
     editBtnText: { color: '#fff', fontSize: 15, fontWeight: '600', fontFamily: 'Inter_600SemiBold' },
-    delBtn: { backgroundColor: '#FEF2F2', borderRadius: 12, paddingVertical: 13, paddingHorizontal: 20, alignItems: 'center', borderWidth: 1, borderColor: '#FECACA' },
+    delBtn: { backgroundColor: colors.muted, borderRadius: 12, paddingVertical: 13, paddingHorizontal: 20, alignItems: 'center', borderWidth: 1, borderColor: colors.border },
+    secondActionRow: { flexDirection: 'row', gap: 10, marginBottom: 20 },
+    outlineBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderRadius: 12, paddingVertical: 12, borderWidth: 1.5, borderColor: colors.border, backgroundColor: colors.card },
+    outlineBtnText: { fontSize: 13, fontWeight: '600', fontFamily: 'Inter_600SemiBold', color: colors.text },
     center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
     detailCard: { backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, padding: 16, marginBottom: 16 },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: colors.border },
@@ -139,7 +146,7 @@ export default function CustomerDetailScreen() {
             <Text style={s.statLabel}>Total Paid</Text>
           </View>
           <View style={s.statCard}>
-            <Text style={[s.statVal, { color: '#D97706' }]}>{cur}{totalPending.toFixed(0)}</Text>
+            <Text style={[s.statVal, { color: colors.warning }]}>{cur}{totalPending.toFixed(0)}</Text>
             <Text style={s.statLabel}>Pending</Text>
           </View>
           <View style={s.statCard}>
@@ -170,7 +177,24 @@ export default function CustomerDetailScreen() {
             <Text style={s.editBtnText}>Edit Customer</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.delBtn} onPress={handleDelete}>
-            <Feather name="trash-2" size={18} color="#DC2626" />
+            <Feather name="trash-2" size={18} color={colors.destructive} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={s.secondActionRow}>
+          <TouchableOpacity
+            style={[s.outlineBtn, { borderColor: colors.primary, backgroundColor: colors.accent }]}
+            onPress={() => router.push('/(tabs)/bills')}
+          >
+            <Feather name="file-text" size={15} color={colors.primary} />
+            <Text style={[s.outlineBtnText, { color: colors.primary }]}>Generate Bill</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={s.outlineBtn}
+            onPress={() => router.push('/(tabs)/bills')}
+          >
+            <Feather name="clock" size={15} color={colors.mutedForeground} />
+            <Text style={s.outlineBtnText}>Bill History</Text>
           </TouchableOpacity>
         </View>
 
@@ -187,8 +211,8 @@ export default function CustomerDetailScreen() {
                 </View>
                 <View style={s.entryRight}>
                   <Text style={s.entryAmt}>{cur}{e.totalAmount.toFixed(0)}</Text>
-                  <View style={[s.entryBadge, { backgroundColor: e.paymentStatus === 'paid' ? '#D1FAE5' : '#FEF3C7' }]}>
-                    <Text style={[s.entryBadgeText, { color: e.paymentStatus === 'paid' ? '#065F46' : '#92400E' }]}>
+                  <View style={[s.entryBadge, { backgroundColor: e.paymentStatus === 'paid' ? isPaidBg : isPendingBg }]}>
+                    <Text style={[s.entryBadgeText, { color: e.paymentStatus === 'paid' ? isPaidText : isPendingText }]}>
                       {e.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
                     </Text>
                   </View>

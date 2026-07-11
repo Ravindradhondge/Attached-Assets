@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useColors } from '@/hooks/useColors';
 import { getSettings, saveSettings } from '@/services/settingsService';
 import { AppSettings } from '@/types';
@@ -24,11 +25,12 @@ const BILLING_DAYS = [1, 2, 5, 10, 15];
 
 export default function SettingsScreen() {
   const colors = useColors();
+  const { theme, setTheme } = useTheme();
   const insets = useSafeAreaInsets();
   const { signOut, user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState<AppSettings>({ businessName: '', defaultCurrency: '₹', defaultWaterRate: 10, billingDay: 1 });
+  const [form, setForm] = useState<AppSettings>({ businessName: '', defaultCurrency: '₹', billingDay: 1 });
   const [customDay, setCustomDay] = useState('');
   const [useCustomDay, setUseCustomDay] = useState(false);
 
@@ -47,7 +49,6 @@ export default function SettingsScreen() {
 
   const handleSave = async () => {
     if (!form.businessName.trim()) { Alert.alert('Error', 'Business name is required.'); return; }
-    if (form.defaultWaterRate <= 0) { Alert.alert('Error', 'Water rate must be greater than 0.'); return; }
     const billingDay = useCustomDay ? parseInt(customDay) || 1 : form.billingDay;
     if (billingDay < 1 || billingDay > 28) { Alert.alert('Error', 'Billing day must be between 1 and 28.'); return; }
     setSaving(true);
@@ -75,10 +76,14 @@ export default function SettingsScreen() {
     chipRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
     chip: { borderRadius: 10, paddingHorizontal: 14, paddingVertical: 9, borderWidth: 1.5, minWidth: 46, alignItems: 'center' },
     chipText: { fontSize: 14, fontWeight: '600', fontFamily: 'Inter_600SemiBold' },
+    themeRow: { flexDirection: 'row', gap: 12 },
+    themeBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, borderRadius: 12, paddingVertical: 14, borderWidth: 1.5, borderColor: colors.border, backgroundColor: colors.background },
+    themeBtnActive: { borderColor: colors.primary, backgroundColor: colors.accent },
+    themeBtnText: { fontSize: 14, fontWeight: '600', fontFamily: 'Inter_600SemiBold' },
     saveBtn: { backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 15, alignItems: 'center', marginTop: 4, shadowColor: colors.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
     saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '700', fontFamily: 'Inter_700Bold' },
-    logoutSection: { backgroundColor: '#FEF2F2', borderRadius: 16, borderWidth: 1, borderColor: '#FECACA', padding: 18, marginBottom: 16 },
-    logoutBtn: { backgroundColor: '#DC2626', borderRadius: 12, paddingVertical: 13, alignItems: 'center' },
+    logoutSection: { backgroundColor: colors.muted, borderRadius: 16, borderWidth: 1, borderColor: colors.border, padding: 18, marginBottom: 16 },
+    logoutBtn: { backgroundColor: colors.destructive, borderRadius: 12, paddingVertical: 13, alignItems: 'center' },
     logoutText: { color: '#fff', fontSize: 15, fontWeight: '600', fontFamily: 'Inter_600SemiBold' },
     userRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
     center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
@@ -99,8 +104,6 @@ export default function SettingsScreen() {
           </View>
           <Text style={s.label}>Business Name</Text>
           <TextInput style={s.input} value={form.businessName} onChangeText={(v) => setForm((f) => ({ ...f, businessName: v }))} placeholder="e.g. Sharma Water Supply" placeholderTextColor={colors.mutedForeground} />
-          <Text style={s.label}>Default Water Rate (per unit)</Text>
-          <TextInput style={s.input} value={String(form.defaultWaterRate)} onChangeText={(v) => setForm((f) => ({ ...f, defaultWaterRate: parseFloat(v) || 0 }))} keyboardType="decimal-pad" placeholder="e.g. 10" placeholderTextColor={colors.mutedForeground} />
           <Text style={s.label}>Default Currency</Text>
           <View style={s.chipRow}>
             {CURRENCIES.map((c) => (
@@ -113,7 +116,30 @@ export default function SettingsScreen() {
 
         <View style={s.section}>
           <View style={s.sectionHeader}>
-            <View style={[s.sectionIcon, { backgroundColor: '#EDE9FE' }]}><Feather name="calendar" size={15} color="#7C3AED" /></View>
+            <View style={[s.sectionIcon, { backgroundColor: colors.accent }]}><Feather name="moon" size={15} color={colors.primary} /></View>
+            <Text style={s.sectionTitle}>Appearance</Text>
+          </View>
+          <View style={s.themeRow}>
+            <TouchableOpacity
+              style={[s.themeBtn, theme === 'light' && s.themeBtnActive]}
+              onPress={() => setTheme('light')}
+            >
+              <Feather name="sun" size={18} color={theme === 'light' ? colors.primary : colors.mutedForeground} />
+              <Text style={[s.themeBtnText, { color: theme === 'light' ? colors.primary : colors.mutedForeground }]}>Light</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[s.themeBtn, theme === 'dark' && s.themeBtnActive]}
+              onPress={() => setTheme('dark')}
+            >
+              <Feather name="moon" size={18} color={theme === 'dark' ? colors.primary : colors.mutedForeground} />
+              <Text style={[s.themeBtnText, { color: theme === 'dark' ? colors.primary : colors.mutedForeground }]}>Dark</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={s.section}>
+          <View style={s.sectionHeader}>
+            <View style={[s.sectionIcon, { backgroundColor: colors.accent }]}><Feather name="calendar" size={15} color={colors.primary} /></View>
             <Text style={s.sectionTitle}>Billing Date</Text>
           </View>
           <Text style={s.hint}>The day of the month when bills are generated.</Text>
@@ -148,8 +174,8 @@ export default function SettingsScreen() {
 
         <View style={s.logoutSection}>
           <View style={s.userRow}>
-            <Feather name="user" size={14} color="#DC2626" />
-            <Text style={{ fontSize: 13, color: '#DC2626', fontFamily: 'Inter_400Regular' }}>{user?.email}</Text>
+            <Feather name="user" size={14} color={colors.mutedForeground} />
+            <Text style={{ fontSize: 13, color: colors.mutedForeground, fontFamily: 'Inter_400Regular' }}>{user?.email}</Text>
           </View>
           <TouchableOpacity style={s.logoutBtn} onPress={() => Alert.alert('Sign Out', 'Are you sure?', [
             { text: 'Cancel', style: 'cancel' },

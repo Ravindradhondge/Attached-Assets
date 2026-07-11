@@ -16,6 +16,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { useColors } from "@/hooks/useColors";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,6 +27,7 @@ function RootLayoutNav() {
   const { user, loading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const colors = useColors();
 
   useEffect(() => {
     if (loading) return;
@@ -39,16 +42,16 @@ function RootLayoutNav() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F8FAFC" }}>
-        <ActivityIndicator size="large" color="#2563EB" />
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.background }}>
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
 
   const headerBase = {
-    headerStyle: { backgroundColor: "#0B0F19" },
-    headerTintColor: "#818CF8",
-    headerTitleStyle: { color: "#E2E8F0", fontFamily: "Inter_600SemiBold" },
+    headerStyle: { backgroundColor: colors.background },
+    headerTintColor: colors.primary,
+    headerTitleStyle: { color: colors.text, fontFamily: "Inter_600SemiBold" },
     headerShadowVisible: false,
   };
 
@@ -86,9 +89,11 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <GestureHandlerRootView>
             <KeyboardProvider>
-              <AuthProvider>
-                <RootLayoutNav />
-              </AuthProvider>
+              <ThemeProvider>
+                <AuthProvider>
+                  <RootLayoutNav />
+                </AuthProvider>
+              </ThemeProvider>
             </KeyboardProvider>
           </GestureHandlerRootView>
         </QueryClientProvider>
