@@ -123,10 +123,10 @@ export default function CustomersScreen() {
             <Feather name="edit-2" size={14} color={colors.primary} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={[s.actionBtn, { borderColor: '#FECACA', backgroundColor: '#FEF2F2' }]}
+            style={[s.actionBtn, { borderColor: '#5B1F1F', backgroundColor: '#2D1010' }]}
             onPress={() => handleDelete(item.id, item.name)}
           >
-            <Feather name="trash-2" size={14} color="#DC2626" />
+            <Feather name="trash-2" size={14} color="#F87171" />
           </TouchableOpacity>
         </View>
       </View>
@@ -144,8 +144,8 @@ export default function CustomersScreen() {
           <Feather name="droplet" size={12} color={colors.mutedForeground} />
           <Text style={s.infoText}>₹{item.waterRate}/unit</Text>
         </View>
-        <View style={[s.badge, { backgroundColor: item.status === 'active' ? '#D1FAE5' : '#F1F5F9' }]}>
-          <Text style={[s.badgeText, { color: item.status === 'active' ? '#065F46' : colors.mutedForeground }]}>
+        <View style={[s.badge, { backgroundColor: item.status === 'active' ? '#0D2218' : '#1A2030' }]}>
+          <Text style={[s.badgeText, { color: item.status === 'active' ? '#34D399' : colors.mutedForeground }]}>
             {item.status === 'active' ? 'Active' : 'Inactive'}
           </Text>
         </View>

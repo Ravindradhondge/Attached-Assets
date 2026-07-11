@@ -90,7 +90,7 @@ export default function DashboardScreen() {
     sectionTitle: { fontSize: 15, fontWeight: '600', color: colors.text, fontFamily: 'Inter_600SemiBold', marginTop: 20, marginBottom: 10 },
     row: { flexDirection: 'row', gap: 12, marginBottom: 12 },
     recentCard: { backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 10 },
-    recentIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center' },
+    recentIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#252D45', alignItems: 'center', justifyContent: 'center' },
     recentMain: { flex: 1 },
     recentName: { fontSize: 14, fontWeight: '600', color: colors.text, fontFamily: 'Inter_600SemiBold' },
     recentSub: { fontSize: 12, color: colors.mutedForeground, fontFamily: 'Inter_400Regular', marginTop: 1 },
@@ -102,7 +102,7 @@ export default function DashboardScreen() {
     monthValue: { fontSize: 28, fontWeight: '700', color: '#fff', fontFamily: 'Inter_700Bold', marginTop: 4 },
     monthSub: { fontSize: 12, color: 'rgba(255,255,255,0.65)', fontFamily: 'Inter_400Regular', marginTop: 2 },
     billCard: { backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 10 },
-    billIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#EDE9FE', alignItems: 'center', justifyContent: 'center' },
+    billIcon: { width: 38, height: 38, borderRadius: 10, backgroundColor: '#1E1B38', alignItems: 'center', justifyContent: 'center' },
   });
 
   if (loading) {
@@ -171,8 +171,8 @@ export default function DashboardScreen() {
                   <Text style={s.recentName}>{b.customerName}</Text>
                   <Text style={s.recentSub}>{b.billNumber} · {b.billingMonth} · {cur}{b.grandTotal.toFixed(0)}</Text>
                 </View>
-                <View style={[s.badge, { backgroundColor: b.status === 'paid' ? '#D1FAE5' : '#FEF3C7' }]}>
-                  <Text style={[s.badgeText, { color: b.status === 'paid' ? '#065F46' : '#92400E' }]}>
+                <View style={[s.badge, { backgroundColor: b.status === 'paid' ? '#0D2218' : '#241A06' }]}>
+                  <Text style={[s.badgeText, { color: b.status === 'paid' ? '#34D399' : '#FBBF24' }]}>
                     {b.status === 'paid' ? 'Paid' : 'Pending'}
                   </Text>
                 </View>
@@ -194,8 +194,8 @@ export default function DashboardScreen() {
                 <Text style={s.recentName}>{e.customerName}</Text>
                 <Text style={s.recentSub}>{e.date} · {e.waterQuantity} units · {cur}{e.totalAmount}</Text>
               </View>
-              <View style={[s.badge, { backgroundColor: e.paymentStatus === 'paid' ? '#D1FAE5' : '#FEF3C7' }]}>
-                <Text style={[s.badgeText, { color: e.paymentStatus === 'paid' ? '#065F46' : '#92400E' }]}>
+              <View style={[s.badge, { backgroundColor: e.paymentStatus === 'paid' ? '#0D2218' : '#241A06' }]}>
+                <Text style={[s.badgeText, { color: e.paymentStatus === 'paid' ? '#34D399' : '#FBBF24' }]}>
                   {e.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
                 </Text>
               </View>

@@ -123,8 +123,8 @@ export default function EntriesScreen() {
         </View>
         <View style={s.right}>
           <Text style={s.amount}>{currency}{item.totalAmount.toFixed(0)}</Text>
-          <View style={[s.badge, { backgroundColor: item.paymentStatus === 'paid' ? '#D1FAE5' : '#FEF3C7' }]}>
-            <Text style={[s.badgeText, { color: item.paymentStatus === 'paid' ? '#065F46' : '#92400E' }]}>
+          <View style={[s.badge, { backgroundColor: item.paymentStatus === 'paid' ? '#0D2218' : '#241A06' }]}>
+            <Text style={[s.badgeText, { color: item.paymentStatus === 'paid' ? '#34D399' : '#FBBF24' }]}>
               {item.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
             </Text>
           </View>
@@ -150,10 +150,10 @@ export default function EntriesScreen() {
             <Feather name="edit-2" size={12} color={colors.primary} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={[s.actionBtn, { borderColor: '#FECACA', backgroundColor: '#FEF2F2' }]}
+            style={[s.actionBtn, { borderColor: '#5B1F1F', backgroundColor: '#2D1010' }]}
             onPress={() => handleDelete(item.id, item.customerName)}
           >
-            <Feather name="trash-2" size={12} color="#DC2626" />
+            <Feather name="trash-2" size={12} color="#F87171" />
           </TouchableOpacity>
         </View>
       </View>
@@ -190,17 +190,17 @@ export default function EntriesScreen() {
           </TouchableOpacity>
         </View>
         <View style={s.summaryRow}>
-          <View style={[s.summaryCard, { backgroundColor: '#EFF6FF' }]}>
-            <Text style={[s.summaryVal, { color: colors.primary }]}>{currency}{totalAmount.toFixed(0)}</Text>
-            <Text style={[s.summaryLabel, { color: colors.primary }]}>Total</Text>
+          <View style={[s.summaryCard, { backgroundColor: '#1E2538' }]}>
+            <Text style={[s.summaryVal, { color: '#818CF8' }]}>{currency}{totalAmount.toFixed(0)}</Text>
+            <Text style={[s.summaryLabel, { color: '#818CF8' }]}>Total</Text>
           </View>
-          <View style={[s.summaryCard, { backgroundColor: '#D1FAE5' }]}>
-            <Text style={[s.summaryVal, { color: '#065F46' }]}>{currency}{paidAmount.toFixed(0)}</Text>
-            <Text style={[s.summaryLabel, { color: '#065F46' }]}>Collected</Text>
+          <View style={[s.summaryCard, { backgroundColor: '#0D2218' }]}>
+            <Text style={[s.summaryVal, { color: '#34D399' }]}>{currency}{paidAmount.toFixed(0)}</Text>
+            <Text style={[s.summaryLabel, { color: '#34D399' }]}>Collected</Text>
           </View>
-          <View style={[s.summaryCard, { backgroundColor: '#FEF3C7' }]}>
-            <Text style={[s.summaryVal, { color: '#92400E' }]}>{currency}{pendingAmount.toFixed(0)}</Text>
-            <Text style={[s.summaryLabel, { color: '#92400E' }]}>Pending</Text>
+          <View style={[s.summaryCard, { backgroundColor: '#241A06' }]}>
+            <Text style={[s.summaryVal, { color: '#FBBF24' }]}>{currency}{pendingAmount.toFixed(0)}</Text>
+            <Text style={[s.summaryLabel, { color: '#FBBF24' }]}>Pending</Text>
           </View>
         </View>
       </View>

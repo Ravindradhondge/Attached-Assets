@@ -45,26 +45,21 @@ function RootLayoutNav() {
     );
   }
 
+  const headerBase = {
+    headerStyle: { backgroundColor: "#0B0F19" },
+    headerTintColor: "#818CF8",
+    headerTitleStyle: { color: "#E2E8F0", fontFamily: "Inter_600SemiBold" },
+    headerShadowVisible: false,
+  };
+
   return (
     <Stack screenOptions={{ headerBackTitle: "Back" }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="login" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="customer/add"
-        options={{ title: "Customer", headerStyle: { backgroundColor: "#F8FAFC" }, headerTintColor: "#2563EB" }}
-      />
-      <Stack.Screen
-        name="customer/[id]"
-        options={{ title: "Customer Profile", headerStyle: { backgroundColor: "#F8FAFC" }, headerTintColor: "#2563EB" }}
-      />
-      <Stack.Screen
-        name="entry/add"
-        options={{ title: "Water Entry", headerStyle: { backgroundColor: "#F8FAFC" }, headerTintColor: "#2563EB" }}
-      />
-      <Stack.Screen
-        name="bill/[id]"
-        options={{ title: "Bill Details", headerStyle: { backgroundColor: "#F8FAFC" }, headerTintColor: "#2563EB" }}
-      />
+      <Stack.Screen name="customer/add" options={{ title: "Customer", ...headerBase }} />
+      <Stack.Screen name="customer/[id]" options={{ title: "Customer Profile", ...headerBase }} />
+      <Stack.Screen name="entry/add" options={{ title: "Water Entry", ...headerBase }} />
+      <Stack.Screen name="bill/[id]" options={{ title: "Bill Details", ...headerBase }} />
     </Stack>
   );
 }

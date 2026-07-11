@@ -195,8 +195,8 @@ export default function BillsScreen() {
             <Text style={s.name}>{item.customerName}</Text>
             <Text style={s.billNum}>{item.billNumber} · {item.customerArea}</Text>
           </View>
-          <View style={[s.statusBadge, { backgroundColor: isPaid ? '#D1FAE5' : '#FEF3C7' }]}>
-            <Text style={[s.statusText, { color: isPaid ? '#065F46' : '#92400E' }]}>
+          <View style={[s.statusBadge, { backgroundColor: isPaid ? '#0D2218' : '#241A06' }]}>
+            <Text style={[s.statusText, { color: isPaid ? '#34D399' : '#FBBF24' }]}>
               {isPaid ? 'Paid' : 'Pending'}
             </Text>
           </View>
@@ -232,15 +232,15 @@ export default function BillsScreen() {
               : <><Feather name="download" size={12} color={colors.primary} /><Text style={[s.actionText, { color: colors.primary }]}>PDF</Text></>}
           </TouchableOpacity>
           <TouchableOpacity
-            style={[s.actionBtn, { borderColor: '#D1FAE5', backgroundColor: '#F0FDF4' }]}
+            style={[s.actionBtn, { borderColor: '#1A3A2A', backgroundColor: '#0D2218' }]}
             onPress={() => handleWhatsApp(item)}
           >
-            <Feather name="message-circle" size={12} color="#059669" />
-            <Text style={[s.actionText, { color: '#059669' }]}>WhatsApp</Text>
+            <Feather name="message-circle" size={12} color="#34D399" />
+            <Text style={[s.actionText, { color: '#34D399' }]}>WhatsApp</Text>
           </TouchableOpacity>
           {!isPaid && (
             <TouchableOpacity
-              style={[s.actionBtn, { borderColor: '#DBEAFE', backgroundColor: '#EFF6FF' }]}
+              style={[s.actionBtn, { borderColor: '#2A3563', backgroundColor: '#1E2538' }]}
               onPress={() => handleMarkPaid(item)}
             >
               <Feather name="check-circle" size={12} color={colors.primary} />
@@ -248,10 +248,10 @@ export default function BillsScreen() {
             </TouchableOpacity>
           )}
           <TouchableOpacity
-            style={[s.actionBtn, { borderColor: '#FECACA', backgroundColor: '#FEF2F2', flex: 0, paddingHorizontal: 10 }]}
+            style={[s.actionBtn, { borderColor: '#5B1F1F', backgroundColor: '#2D1010', flex: 0, paddingHorizontal: 10 }]}
             onPress={() => handleDelete(item)}
           >
-            <Feather name="trash-2" size={12} color="#DC2626" />
+            <Feather name="trash-2" size={12} color="#F87171" />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -279,21 +279,21 @@ export default function BillsScreen() {
           </TouchableOpacity>
         </View>
         <View style={s.statsRow}>
-          <View style={[s.statCard, { backgroundColor: '#EFF6FF' }]}>
-            <Text style={[s.statVal, { color: colors.primary }]}>{totalBills}</Text>
-            <Text style={[s.statLabel, { color: colors.primary }]}>Total Bills</Text>
+          <View style={[s.statCard, { backgroundColor: '#1E2538' }]}>
+            <Text style={[s.statVal, { color: '#818CF8' }]}>{totalBills}</Text>
+            <Text style={[s.statLabel, { color: '#818CF8' }]}>Total Bills</Text>
           </View>
-          <View style={[s.statCard, { backgroundColor: '#D1FAE5' }]}>
-            <Text style={[s.statVal, { color: '#065F46' }]}>{paidBills}</Text>
-            <Text style={[s.statLabel, { color: '#065F46' }]}>Paid</Text>
+          <View style={[s.statCard, { backgroundColor: '#0D2218' }]}>
+            <Text style={[s.statVal, { color: '#34D399' }]}>{paidBills}</Text>
+            <Text style={[s.statLabel, { color: '#34D399' }]}>Paid</Text>
           </View>
-          <View style={[s.statCard, { backgroundColor: '#FEF3C7' }]}>
-            <Text style={[s.statVal, { color: '#92400E' }]}>{pendingBills}</Text>
-            <Text style={[s.statLabel, { color: '#92400E' }]}>Pending</Text>
+          <View style={[s.statCard, { backgroundColor: '#241A06' }]}>
+            <Text style={[s.statVal, { color: '#FBBF24' }]}>{pendingBills}</Text>
+            <Text style={[s.statLabel, { color: '#FBBF24' }]}>Pending</Text>
           </View>
-          <View style={[s.statCard, { backgroundColor: '#F3E8FF' }]}>
-            <Text style={[s.statVal, { color: '#7C3AED' }]}>{cur}{monthTotal.toFixed(0)}</Text>
-            <Text style={[s.statLabel, { color: '#7C3AED' }]}>Total Amount</Text>
+          <View style={[s.statCard, { backgroundColor: '#1E1B38' }]}>
+            <Text style={[s.statVal, { color: '#A78BFA' }]}>{cur}{monthTotal.toFixed(0)}</Text>
+            <Text style={[s.statLabel, { color: '#A78BFA' }]}>Total Amount</Text>
           </View>
         </View>
       </View>
